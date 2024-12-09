@@ -32,10 +32,20 @@ public class SaleService {
 
 
 	public List<SaleSummary> getSummary(String minDate, String maxDate , String name){
-		String nome = name;
-		LocalDate dataFim = maxDate.isBlank()? today: LocalDate.parse(maxDate, fmt);
-		LocalDate dataInicio = minDate.isBlank() ? dataFim.minusYears(1L) : LocalDate.parse(minDate, fmt);
-		List<SaleSummary> dto = repository.search1(dataInicio, dataFim, nome);
+		LocalDate dataFim;
+		LocalDate dataInicio;
+		if(maxDate != null && !maxDate.isBlank()){
+			dataFim = LocalDate.parse(maxDate, fmt);
+		}else {
+			dataFim = today;
+		}
+
+		if(minDate != null && !minDate.isBlank()){
+			dataInicio = LocalDate.parse(minDate, fmt);
+		}else {
+			dataInicio = dataFim.minusYears(1L);
+		}
+		List<SaleSummary> dto = repository.search1(dataInicio, dataFim, name);
 		return dto;
 	}
 
